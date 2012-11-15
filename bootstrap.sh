@@ -36,6 +36,11 @@ if [ $# -ne 1 ]; then
     echo "Usage: $0 project_name"
     exit 1
 else
+    pushd "$(dirname "$0")"
+        git submodule init
+        git submodule update
+    popd
+
     PROJECT=$1
     mkdir $PROJECT
     cd $PROJECT
