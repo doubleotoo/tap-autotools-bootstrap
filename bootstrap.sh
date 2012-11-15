@@ -168,6 +168,50 @@ Bootstrapping complete, now type './configure' to configure your project with Au
 
 EOF
 
+cat > .gitignore <<-EOF
+# Editor backups
+*~
+# libtool temp dir
+.libs
+# .svn files
+.svn
+# editor temp file
+.*swo
+*.swp
+*.dump2
+*.o
+# /
+Makefile.in
+/aclocal.m4
+/rose_config.h.in
+/configure
+/autom4te.cache
+/*.tar.gz
+/libltdl
 
-./configure
+# /config/
+config.guess
+config.sub
+install-sh
+ltmain.sh
+depcomp
+missing
+
+#
+
+workspace
+build_tree
+
+# OS X Finder files
+.DS_Store
+EOF
+
+git init .
+git add .
+git commit -a -m "Add initial content from bootstrap"
+
+mkdir build_tree
+cd build_tree
+
+../configure
 make check
