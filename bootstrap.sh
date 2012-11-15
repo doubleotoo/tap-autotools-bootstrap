@@ -148,9 +148,14 @@ chmod +x tests/hello.test
 #------------------------------------------------------------------------------
 # Autotools Bootstrap!
 #------------------------------------------------------------------------------
+cat > bootstrap.sh <<-EOF
+#!/bin/bash -x
 aclocal
 autoconf
 automake -a
+EOF
+chmod +x bootstrap.sh
+./bootstrap.sh
 
 cat <<-EOF
 
