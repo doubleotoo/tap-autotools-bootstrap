@@ -30,6 +30,7 @@
 : ${CONFIG_AUX_DIR:=build-aux}
 : ${ABS_SRCDIR:=$(cd "$(dirname "$0")" && pwd)}
 : ${TAP_DRIVER:=${ABS_SRCDIR}/tap-driver.sh}
+: ${LIBTAP_SH:=${ABS_SRCDIR}/c-tap-harness/tests/tap/libtap.sh}
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 project_name"
@@ -112,6 +113,9 @@ EOF
 # Makefile.am
 #------------------------------------------------------------------------------
 cat > Makefile.am <<-EOF
+# Make the libtap.sh file available to the Shell test scripts
+export am_libtap_sh=\${abs_top_srcdir}/tests/libtap.sh
+
 # Verbose use tap-driver.sh CLI option '--comments'
 TEST_LOG_DRIVER = env AM_TAP_AWK='\$(AWK)' \$(SHELL) \\
                       \$(top_srcdir)/build-aux/tap-driver.sh
@@ -121,14 +125,22 @@ EOF
 
 mkdir tests
 
+pushd tests
+  cp "$LIBTAP_SH" .
+  chmod +x libtap.sh
+popd
+
 cat > tests/hello.test <<-EOF
 #!/bin/sh
-echo "1..4" # Number of tests to be executed.
-echo 'ok 1 - Swallows fly'
-echo 'not ok 2 - Caterpillars fly # TODO metamorphosis in progress'
-echo 'ok 3 - Pigs fly # SKIP not enough acid'
-echo '# I just love word plays ...'
-echo 'ok 4 - Flies fly too :-)'
+
+source \$am_libtap_sh
+
+plan  4
+ok    'Swallows fly' true
+ok    'Caterpillars fly # TODO metamorphosis in progress' false
+skip  'Pigs fly # SKIP not enough acid'
+diag  '# I just love word plays ...'
+ok    'Flies fly too :-)' true
 EOF
 chmod +x tests/hello.test
 
@@ -147,6 +159,5 @@ Bootstrapping complete, now type './configure' to configure your project with Au
 EOF
 
 
-cd $PROJECT
 ./configure
 make check

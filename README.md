@@ -24,6 +24,14 @@ Written by Tom Tromey <tromey@redhat.com>
        and Alexandre Duret-Lutz <adl@gnu.org>.
 ```
 
+
+## c-tap-harness
+
+### libtap.sh
+
+TAP producer for Shell scripts: `c-tap-harness/tests/tap/libtap.sh`.
+
+
 ## Example
 
 ```bash
