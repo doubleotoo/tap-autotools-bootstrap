@@ -1,5 +1,14 @@
 # tap-autotools-bootstrap
 
+## Usage
+
+```bash
+$ ./bootstrap.sh <project_name>
+```
+
+
+## Prerequisites
+
 Tested with these Autotools:
 
 ```bash
